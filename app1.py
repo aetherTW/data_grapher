@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QPushButton,
-    QLabel, QFileDialog, QComboBox, QLineEdit
+    QLabel, QFileDialog, QComboBox, QLineEdit, QTableWidget, QTableWidgetItem
 )
 from PyQt5.QtGui import QPixmap, QImage
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -41,21 +41,30 @@ class MainWindow(QMainWindow):
         self.search_box.setPlaceholderText("Search DUT SN")
         self.search_box.setEnabled(False)
         self.search_box.returnPressed.connect(self.search_dut_sn) # search after enter key
+        
+        # Create table widget
+        self.table_widget = QTableWidget()
 
         # Layout
         layoutV1 = QVBoxLayout()
         layoutH1 = QHBoxLayout()
-        layoutH2 = QHBoxLayout()
+        layoutV2 = QVBoxLayout()
 
         layoutV1.addWidget(self.choose_specs_button)
         layoutV1.addWidget(self.choose_results_button)
-        layoutV1.addWidget(self.canvas)
-        layoutV1.addWidget(self.variable_combo_box)
         layoutV1.addWidget(self.search_box)
+        layoutV1.addWidget(self.table_widget)  # Add table widget to the layout
+
+        layoutV2.addWidget(self.canvas)
+        layoutV2.addWidget(self.variable_combo_box)
+
+        layoutH1.addLayout(layoutV1)
+        layoutH1.addLayout(layoutV2)
+
 
         # Main widget
         central_widget = QWidget()
-        central_widget.setLayout(layoutV1)
+        central_widget.setLayout(layoutH1)
         self.setCentralWidget(central_widget)
 
         # variables
@@ -158,11 +167,34 @@ class MainWindow(QMainWindow):
 
                     self.scatter_plot = self.ax.scatter(x_value, y_mid, color='green', marker='v', s=100)
                     self.canvas.draw()
-                    
+
+                    # Populate table with search results
+                    self.populate_table(dut_sn_index)
+
                 except ValueError:
                     self.scatter_plot = None
                     self.canvas.draw()
+                    self.clear_table()
                     print("DUT_SN not found in results_df")
+
+
+    def populate_table(self, dut_sn_index):
+        # Clear existing table content
+        self.clear_table()
+        # Get data for the selected DUT SN
+        selected_row_data = self.results_df.iloc[dut_sn_index]
+
+        # Insert data into a single row in the table
+        self.table_widget.setRowCount(1)
+        self.table_widget.setColumnCount(len(selected_row_data))
+
+        for i, (col_name, value) in enumerate(selected_row_data.items()):
+            self.table_widget.setItem(0, i, QTableWidgetItem(str(value)))
+
+        self.table_widget.setHorizontalHeaderLabels(selected_row_data.index)
+
+    def clear_table(self):
+        self.table_widget.clearContents()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
