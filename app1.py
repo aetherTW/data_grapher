@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QPushButton,
-    QLabel, QFileDialog, QComboBox, QLineEdit, QTableWidget, QTableWidgetItem
+    QLabel, QFileDialog, QComboBox, QLineEdit, QTableWidget, QTableWidgetItem, QScrollArea
 )
 from PyQt5.QtGui import QPixmap, QImage
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -18,6 +18,20 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("Histogram Display")
+
+        # File labels
+        self.specs_label = QLabel("Specs File: None")
+        self.results_label = QLabel("Results Files: None")
+        self.search_label = QLabel("Search DUT SN:")
+
+        # Scroll areas for labels
+        self.specs_scroll_area = QScrollArea()
+        self.specs_scroll_area.setWidget(self.specs_label)
+        self.specs_scroll_area.setWidgetResizable(True)
+
+        self.results_scroll_area = QScrollArea()
+        self.results_scroll_area.setWidget(self.results_label)
+        self.results_scroll_area.setWidgetResizable(True)
 
         # Create graph
         self.canvas = FigureCanvas(plt.Figure())
@@ -51,18 +65,19 @@ class MainWindow(QMainWindow):
         layoutV2 = QVBoxLayout()
 
         layoutV1.addWidget(self.choose_specs_button)
+        layoutV1.addWidget(self.specs_scroll_area)
         layoutV1.addWidget(self.choose_results_button)
+        layoutV1.addWidget(self.results_scroll_area)
         layoutV1.addWidget(self.search_box)
+        layoutV1.addWidget(self.search_label)
         layoutV1.addWidget(self.table_widget)  # Add table widget to the layout
 
         layoutV2.addWidget(self.canvas)
         layoutV2.addWidget(self.variable_combo_box)
 
+        # Main widget
         layoutH1.addLayout(layoutV1)
         layoutH1.addLayout(layoutV2)
-
-
-        # Main widget
         central_widget = QWidget()
         central_widget.setLayout(layoutH1)
         self.setCentralWidget(central_widget)
@@ -77,14 +92,18 @@ class MainWindow(QMainWindow):
         file_dialog = QFileDialog(self)
         file_dialog.setNameFilter("CSV files (*.csv)")
         file_dialog.fileSelected.connect(self.load_specs_data)
-        file_dialog.exec_()
+        if file_dialog.exec_():
+            file_path = file_dialog.selectedFiles()[0]
+            self.specs_label.setText(f"Specs File: {file_path}")
 
     def choose_results_files(self):
         file_dialog = QFileDialog(self)
         file_dialog.setFileMode(QFileDialog.ExistingFiles)
         file_dialog.setNameFilter("CSV files (*.csv)")
         file_dialog.filesSelected.connect(self.load_results_files)
-        file_dialog.exec_()
+        if file_dialog.exec_():
+            file_paths = file_dialog.selectedFiles()
+            self.results_label.setText("Results Files: \n" + "\n".join(file_paths))
 
     def load_specs_data(self, file_path):
         try:
@@ -165,19 +184,22 @@ class MainWindow(QMainWindow):
                     y_mid = (y_min + y_max) / 2
                     x_value = self.results_df.iloc[dut_sn_index][selected_factor]
 
-                    self.scatter_plot = self.ax.scatter(x_value, y_mid, color='green', marker='v', s=100)
+                    self.scatter_plot = self.ax.scatter(x_value, y_mid, color='green', edgecolor="black", marker='v', s=100, label=x_value)
+                    self.ax.legend()  # Add legend
                     self.canvas.draw()
 
                     # Populate table with search results
                     self.populate_table(dut_sn_index)
+                    self.search_label.setText("")
 
                 except ValueError:
+                    self.search_label.setText(f"DUT_SN {search_text} not found")
                     self.scatter_plot = None
                     self.canvas.draw()
                     self.clear_table()
                     print("DUT_SN not found in results_df")
 
-
+    #SEARCH TABLE
     def populate_table(self, dut_sn_index):
         # Clear existing table content
         self.clear_table()
