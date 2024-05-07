@@ -1,0 +1,113 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 HelveticaNeue-Light;\f1\fswiss\fcharset0 Helvetica;\f2\fnil\fcharset0 Monaco;
+\f3\fnil\fcharset0 HelveticaNeue-Italic;\f4\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red255\green255\blue255;\red242\green242\blue242;
+\red0\green0\blue0;\red44\green44\blue44;\red0\green0\blue0;\red164\green8\blue3;\red64\green20\blue151;
+\red246\green246\blue246;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\cssrgb\c100000\c100000\c100000;\csgray\c95825;
+\csgray\c0\c85000;\cssrgb\c22745\c22745\c22745;\csgray\c0\c0;\cssrgb\c71055\c10387\c0;\cssrgb\c32549\c16863\c65882;
+\cssrgb\c97255\c97255\c97255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww21320\viewh12080\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs32 \cf2 \cb3 \expnd0\expndtw0\kerning0
+1a. Setup python and environent 
+\f1\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 \
+\
+{\field{\*\fldinst{HYPERLINK "https://ericsysmin.com/2024/02/05/how-to-install-pyenv-on-macos/"}}{\fldrslt https://ericsysmin.com/2024/02/05/how-to-install-pyenv-on-macos/}}\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f2\fs20 \cf4 \cb5 \CocoaLigature0 brew install Pyenv\
+brew install pyenv-virtualenv\'a0\
+\
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zprofile\
+echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zprofile\
+echo 'eval "$(pyenv init -)"' >> ~/.zprofile\
+\
+\
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc\
+echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc\
+echo 'eval "$(pyenv init -)"' >> ~/.zshrc\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+\cf4 pyenv global system\
+\pard\pardeftab720\partightenfactor0
+\cf4 pyenv activate system\
+pyenv install 3.11.8\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs32 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\CocoaLigature1 1b. setup different environment( Optional)
+\f2\fs20 \cf4 \cb5 \kerning1\expnd0\expndtw0 \CocoaLigature0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+{\field{\*\fldinst{HYPERLINK "https://ioflood.com/blog/pyenv/"}}{\fldrslt 
+\f1\fs24 \cf6 \cb3 \expnd0\expndtw0\kerning0
+\CocoaLigature1 https://ioflood.com/blog/pyenv/}}
+\f1\fs24 \cf6 \cb3 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\fs20 \cf4 \cb5 \kerning1\expnd0\expndtw0 \CocoaLigature0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+\cf4 pyenv virtualenv 3.11.8 app_dev\
+\pard\pardeftab720\partightenfactor0
+\cf4 pyenv activate app_dev\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+\cf4 pip install Pyinstaller cython pandas PyQT6 \
+\pard\pardeftab720\partightenfactor0
+\cf4 pip3 install --upgrade PyInstaller pyinstaller-hooks-contrib\
+
+\f1\fs24 \cf0 \cb1 \CocoaLigature1 \
+Old. Set system version then don't have to deal with this\
+\pard\pardeftab720\partightenfactor0
+{\field{\*\fldinst{HYPERLINK "https://stackoverflow.com/questions/53653083/how-to-correctly-set-pythonpath-for-visual-studio-code"}}{\fldrslt 
+\f2\fs20 \cf4 \cb7 \CocoaLigature0 https://stackoverflow.com/questions/53653083/how-to-correctly-set-pythonpath-for-visual-studio-code}}
+\f2\fs20 \cf4 \cb7 \CocoaLigature0 \
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs24 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+
+\f0\fs32 \cf2 \cb3 \expnd0\expndtw0\kerning0
+2. Setup common python library \
+
+\f1\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 \
+
+\f2\fs20 \cf4 \cb5 \CocoaLigature0 nano .zshrc\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f3\i\fs28 \cf8 \cb3 \expnd0\expndtw0\kerning0
+\CocoaLigature1 Add
+\f1\i0\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f4 \cf9 \cb10 \expnd0\expndtw0\kerning0
+export PYTHONPATH='/Users/ahboyz/Documents/Github/SimplyTech/HWE_apps/common'
+\f1 \cf0 \cb1 \kerning1\expnd0\expndtw0 \
+\
+\
+Maybe need to do more in VS Code according to this articles but seems like don't need\
+{\field{\*\fldinst{HYPERLINK "https://stackoverflow.com/questions/53653083/how-to-correctly-set-pythonpath-for-visual-studio-code"}}{\fldrslt https://stackoverflow.com/questions/53653083/how-to-correctly-set-pythonpath-for-visual-studio-code}}\
+\
+So linting and etc will work. BUT when compiling cython, must compare the files to the current folder first and compile from there. \
+\
+\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs32 \cf2 \cb3 \expnd0\expndtw0\kerning0
+9. Building Mac App
+\f1\fs24 \cf6 \
+\pard\pardeftab720\partightenfactor0
+{\field{\*\fldinst{HYPERLINK "https://www.pythonguis.com/tutorials/packaging-pyqt5-applications-pyinstaller-macos-dmg/"}}{\fldrslt \cf6 https://www.pythonguis.com/tutorials/packaging-pyqt5-applications-pyinstaller-macos-dmg/}}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+
+\f2\fs20 \cf4 \cb5 \kerning1\expnd0\expndtw0 \CocoaLigature0 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb7 \
+}
